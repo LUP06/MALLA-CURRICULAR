@@ -1,196 +1,177 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malla Curricular Economía</title>
-<style>
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f4;
-  margin: 20px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-th {
-  background-color: #f0f0f0;
-}
-
-.ciclo {
-  width: 20%; /* Ajusta el ancho de las columnas según tu diseño */
-}
-
-.materia {
-  cursor: pointer;
-}
-
-.aprobada {
-  background-color: #d4edda; /* Verde claro para aprobadas */
-}
-
-.bloqueada {
-  background-color: #f8d7da; /* Rojo claro para bloqueadas */
-  opacity: 0.7;
-}
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malla Curricular - Economía</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f7f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #2a4f63;
+    }
+    .grid {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 20px;
+    }
+    .cycle {
+      flex: 0 0 250px;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .cycle h3 {
+      text-align: center;
+      color: #355c7d;
+    }
+    .course {
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: #dceefb;
+      color: #083b55;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.3s;
+    }
+    .course.approved {
+      background-color: #a5d6a7;
+      text-decoration: line-through;
+    }
+    .course.locked {
+      background-color: #f2f2f2;
+      color: #999;
+      cursor: not-allowed;
+    }
+    .tooltip {
+      visibility: hidden;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 4px;
+      position: absolute;
+      z-index: 1;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .course.locked:hover .tooltip {
+      visibility: visible;
+    }
+  </style>
 </head>
 <body>
+  <h1>Malla Curricular - Economía</h1>
+  <div class="grid" id="malla"></div>
 
-<h1>Malla Curricular - Economía (2024-2027)</h1>
+  <script>
+    const data = {
+      "I": [
+        { id: "ED1331", name: "COMUNICACIÓN" },
+        { id: "ES1400", name: "ESTADÍSTICA GENERAL" },
+        { id: "IEC1452", name: "FUNDAMENTOS DE ECONOMÍA" },
+        { id: "MA1470", name: "GEOMETRÍA ANALÍTICA" },
+        { id: "MA1408", name: "MATEMÁTICA BÁSICA" },
+        { id: "ED1297", name: "METODOLOGÍA DE LOS ESTUDIOS UNIVERSITARIOS" },
+        { id: "EC1314", name: "HISTORIA ECONÓMICA DEL PERÚ" }
+      ],
+      "II": [
+        { id: "MA1437", name: "ÁLGEBRA LINEAL", req: ["MA1408"] },
+        { id: "CS1285", name: "ANTROPOLOGÍA" },
+        { id: "CB1324", name: "BIOLOGÍA Y EDUCACIÓN AMBIENTAL" },
+        { id: "MA1438", name: "CÁLCULO INFINITESIMAL I", req: ["MA1408", "MA1470"] },
+        { id: "ES1410", name: "ESTADÍSTICA APLICADA", req: ["ES1400"] },
+        { id: "CS1286", name: "FILOSOFÍA Y ÉTICA" },
+        { id: "IEC1453", name: "FUNDAMENTOS DE ECONOMÍA II", req: ["IEC1452"] }
+      ],
+      "III": [
+        { id: "CA2443", name: "ADMINISTRACIÓN EMPRESARIAL" },
+        { id: "EC2421", name: "ANÁLISIS MICROECONÓMICO I", req: ["IEC1453", "MA1438"] },
+        { id: "MA2438", name: "CÁLCULO INFINITESIMAL II", req: ["MA1438"] },
+        { id: "ES2498", name: "MUESTREO ESTADÍSTICO", req: ["ES1410"] },
+        { id: "CS2258", name: "SOCIOLOGÍA" },
+        { id: "ED2277", name: "VISIÓN CONTEMPORÁNEA DEL PERÚ Y EL MUNDO" },
+        { id: "IO2446", name: "TÉCNICAS DE PROGRAMACIÓN", req: ["MA1437", "MA1438"] }
+      ]
+      // Puedes continuar agregando los ciclos IV al X igual que estos.
+    };
 
-<table>
-  <thead>
-    <tr>
-      <th class="ciclo">Ciclo I</th>
-      <th class="ciclo">Ciclo II</th>
-      <th class="ciclo">Ciclo III</th>
-      <th class="ciclo">Ciclo IV</th>
-      <th class="ciclo">Ciclo V</th>
-      <th class="ciclo">Ciclo VI</th>
-      <th class="ciclo">Ciclo VII</th>
-      <th class="ciclo">Ciclo VIII</th>
-      <th class="ciclo">Ciclo IX</th>
-      <th class="ciclo">Ciclo X</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <div class="materia" data-materia="MA1408" data-requisitos="">Matemática Básica</div>
-        <div class="materia" data-materia="MA1470" data-requisitos="">Geometría Analítica</div>
-        <div class="materia" data-materia="EC1452" data-requisitos="">Fundamentos de Economía I</div>
-        <div class="materia" data-materia="ES1400" data-requisitos="">Estadística General</div>
-        <div class="materia" data-materia="EC1392" data-requisitos="">Historia Económica del Perú</div>
-        <div class="materia" data-materia="ED1331" data-requisitos="">Comunicación</div>
-        <div class="materia" data-materia="ED1297" data-requisitos="">Metodología de Estudios Superiores</div>
-      </td>
-      <td>
-        <div class="materia" data-materia="MA1437" data-requisitos="MA1408">Álgebra Lineal</div>
-        <div class="materia" data-materia="MA1438" data-requisitos="MA1470, MA1408">Cálculo Infinitesimal I</div>
-        <div class="materia" data-materia="EC1453" data-requisitos="EC1452">Fundamentos de Economía II</div>
-        <div class="materia" data-materia="ES1495" data-requisitos="ES1400">Estadística Aplicada</div>
-        <div class="materia" data-materia="CB1324" data-requisitos="">Biología y Educación Ambiental</div>
-        <div class="materia" data-materia="CS1286" data-requisitos="">Filosofía y Ética</div>
-        <div class="materia" data-materia="CS1285" data-requisitos="">Antropología</div>
-      </td>
-      <td>
-        <div class="materia" data-materia="IO2446" data-requisitos="MA1437, MA1438">Técnicas de Programación</div>
-        <div class="materia" data-materia="MA2438" data-requisitos="MA1438">Cálculo Infinitesimal II</div>
-        <div class="materia" data-materia="EC2421" data-requisitos="EC1453, MA1438">Análisis Microeconómico I</div>
-        <div class="materia" data-materia="ES2471" data-requisitos="ES1495">Muestreo Estadístico</div>
-        <div class="materia" data-materia="CS2258" data-requisitos="">Sociología</div>
-        <div class="materia" data-materia="CA2443" data-requisitos="">Administración Empresarial</div>
-        <div class="materia" data-materia="ED2277" data-requisitos="">Visión Contemporánea del Perú y del Mundo</div>
-      </td>
-      <td>
-        <!-- Agrega las materias del Ciclo IV aquí -->
-      </td>
-      <td>
-        <!-- Agrega las materias del Ciclo V aquí -->
-      </td>
-      <td>
-        <!-- Agrega las materias del Ciclo VI aquí -->
-      </td>
-      <td>
-        <!-- Agrega las materias del Ciclo VII aquí -->
-      </td>
-      <td>
-        <!-- Agrega las materias del Ciclo VIII aquí -->
-      </td>
-      <td>
-        <!-- Agrega las materias del Ciclo IX aquí -->
-      </td>
-      <td>
-        <!-- Agrega las materias del Ciclo X aquí -->
-      </td>
-    </tr>
-  </tbody>
-</table>
+    const approved = new Set(JSON.parse(localStorage.getItem("approvedCourses") || "[]"));
 
-<script>
-const materias = document.querySelectorAll('.materia');
-const storageKey = 'malla_curricular_economia';
+    function checkUnlocked(course) {
+      if (!course.req) return true;
+      return course.req.every(r => approved.has(r));
+    }
 
-materias.forEach(materia => {
-  materia.addEventListener('click', () => {
-    const materiaId = materia.dataset.materia;
-    const aprobada = materia.classList.toggle('aprobada');
-    localStorage.setItem(storageKey, JSON.stringify(getProgreso()));
-    actualizarEstadoMaterias();
-  });
-});
+    function renderMalla() {
+      const container = document.getElementById("malla");
+      container.innerHTML = "";
 
-function getProgreso() {
-    const progreso = {};
-    materias.forEach(materia => {
-        progreso[materia.dataset.materia] = materia.classList.contains('aprobada');
-    });
-    return progreso;
-}
+      for (const [ciclo, cursos] of Object.entries(data)) {
+        const column = document.createElement("div");
+        column.className = "cycle";
+        const title = document.createElement("h3");
+        title.textContent = `Ciclo ${ciclo}`;
+        column.appendChild(title);
 
-function actualizarEstadoMaterias() {
-    const progreso = JSON.parse(localStorage.getItem(storageKey)) || {};
-    materias.forEach(materia => {
-        const requisitos = materia.dataset.requisitos.split(',').filter(req => req);
-        const aprobados = requisitos.every(req => progreso[req]);
+        for (const curso of cursos) {
+          const div = document.createElement("div");
+          div.className = "course";
+          div.textContent = curso.name;
+          div.dataset.id = curso.id;
 
-        materia.classList.remove('aprobada', 'bloqueada');
-        if (progreso[materia.dataset.materia]) {
-            materia.classList.add('aprobada');
-        } else if (!aprobados) {
-            materia.classList.add('bloqueada');
-            materia.classList.add('tooltip');
-            materia.innerHTML += `<span class="tooltiptext">Requisitos no cumplidos: ${requisitos.filter(req => !progreso[req]).join(', ')}</span>`;
+          const isUnlocked = checkUnlocked(curso);
+
+          if (!isUnlocked) {
+            div.classList.add("locked");
+            const tooltip = document.createElement("div");
+            tooltip.className = "tooltip";
+            tooltip.textContent = `Requiere: ${curso.req.map(r => getNameById(r)).join(", ")}`;
+            div.appendChild(tooltip);
+          } else if (approved.has(curso.id)) {
+            div.classList.add("approved");
+          }
+
+          div.addEventListener("click", () => {
+            if (!checkUnlocked(curso)) return;
+
+            if (approved.has(curso.id)) {
+              approved.delete(curso.id);
+            } else {
+              approved.add(curso.id);
+            }
+
+            localStorage.setItem("approvedCourses", JSON.stringify([...approved]));
+            renderMalla();
+          });
+
+          column.appendChild(div);
         }
-    });
-}
 
-//Cargar progreso desde localStorage al cargar la página
-window.addEventListener('load', actualizarEstadoMaterias);
-</script>
+        container.appendChild(column);
+      }
+    }
 
+    function getNameById(id) {
+      for (const cursos of Object.values(data)) {
+        const found = cursos.find(c => c.id === id);
+        if (found) return found.name;
+      }
+      return id;
+    }
+
+    renderMalla();
+  </script>
 </body>
 </html>
