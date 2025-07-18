@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malla Curricular Economía</title>
+<style>
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f0f0f0;
+}
+
+.ciclo {
+  width: 20%; /* Ajusta el ancho de las columnas según tu diseño */
+}
+
+.materia {
+  cursor: pointer;
+}
+
+.aprobada {
+  background-color: #d4edda; /* Verde claro para aprobadas */
+}
+
+.bloqueada {
+  background-color: #f8d7da; /* Rojo claro para bloqueadas */
+  opacity: 0.7;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<h1>Malla Curricular - Economía (2024-2027)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th class="ciclo">Ciclo I</th>
+      <th class="ciclo">Ciclo II</th>
+      <th class="ciclo">Ciclo III</th>
+      <th class="ciclo">Ciclo IV</th>
+      <th class="ciclo">Ciclo V</th>
+      <th class="ciclo">Ciclo VI</th>
+      <th class="ciclo">Ciclo VII</th>
+      <th class="ciclo">Ciclo VIII</th>
+      <th class="ciclo">Ciclo IX</th>
+      <th class="ciclo">Ciclo X</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <div class="materia" data-materia="MA1408" data-requisitos="">Matemática Básica</div>
+        <div class="materia" data-materia="MA1470" data-requisitos="">Geometría Analítica</div>
+        <div class="materia" data-materia="EC1452" data-requisitos="">Fundamentos de Economía I</div>
+        <div class="materia" data-materia="ES1400" data-requisitos="">Estadística General</div>
+        <div class="materia" data-materia="EC1392" data-requisitos="">Historia Económica del Perú</div>
+        <div class="materia" data-materia="ED1331" data-requisitos="">Comunicación</div>
+        <div class="materia" data-materia="ED1297" data-requisitos="">Metodología de Estudios Superiores</div>
+      </td>
+      <td>
+        <div class="materia" data-materia="MA1437" data-requisitos="MA1408">Álgebra Lineal</div>
+        <div class="materia" data-materia="MA1438" data-requisitos="MA1470, MA1408">Cálculo Infinitesimal I</div>
+        <div class="materia" data-materia="EC1453" data-requisitos="EC1452">Fundamentos de Economía II</div>
+        <div class="materia" data-materia="ES1495" data-requisitos="ES1400">Estadística Aplicada</div>
+        <div class="materia" data-materia="CB1324" data-requisitos="">Biología y Educación Ambiental</div>
+        <div class="materia" data-materia="CS1286" data-requisitos="">Filosofía y Ética</div>
+        <div class="materia" data-materia="CS1285" data-requisitos="">Antropología</div>
+      </td>
+      <td>
+        <div class="materia" data-materia="IO2446" data-requisitos="MA1437, MA1438">Técnicas de Programación</div>
+        <div class="materia" data-materia="MA2438" data-requisitos="MA1438">Cálculo Infinitesimal II</div>
+        <div class="materia" data-materia="EC2421" data-requisitos="EC1453, MA1438">Análisis Microeconómico I</div>
+        <div class="materia" data-materia="ES2471" data-requisitos="ES1495">Muestreo Estadístico</div>
+        <div class="materia" data-materia="CS2258" data-requisitos="">Sociología</div>
+        <div class="materia" data-materia="CA2443" data-requisitos="">Administración Empresarial</div>
+        <div class="materia" data-materia="ED2277" data-requisitos="">Visión Contemporánea del Perú y del Mundo</div>
+      </td>
+      <td>
+        <!-- Agrega las materias del Ciclo IV aquí -->
+      </td>
+      <td>
+        <!-- Agrega las materias del Ciclo V aquí -->
+      </td>
+      <td>
+        <!-- Agrega las materias del Ciclo VI aquí -->
+      </td>
+      <td>
+        <!-- Agrega las materias del Ciclo VII aquí -->
+      </td>
+      <td>
+        <!-- Agrega las materias del Ciclo VIII aquí -->
+      </td>
+      <td>
+        <!-- Agrega las materias del Ciclo IX aquí -->
+      </td>
+      <td>
+        <!-- Agrega las materias del Ciclo X aquí -->
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<script>
+const materias = document.querySelectorAll('.materia');
+const storageKey = 'malla_curricular_economia';
+
+materias.forEach(materia => {
+  materia.addEventListener('click', () => {
+    const materiaId = materia.dataset.materia;
+    const aprobada = materia.classList.toggle('aprobada');
+    localStorage.setItem(storageKey, JSON.stringify(getProgreso()));
+    actualizarEstadoMaterias();
+  });
+});
+
+function getProgreso() {
+    const progreso = {};
+    materias.forEach(materia => {
+        progreso[materia.dataset.materia] = materia.classList.contains('aprobada');
+    });
+    return progreso;
+}
+
+function actualizarEstadoMaterias() {
+    const progreso = JSON.parse(localStorage.getItem(storageKey)) || {};
+    materias.forEach(materia => {
+        const requisitos = materia.dataset.requisitos.split(',').filter(req => req);
+        const aprobados = requisitos.every(req => progreso[req]);
+
+        materia.classList.remove('aprobada', 'bloqueada');
+        if (progreso[materia.dataset.materia]) {
+            materia.classList.add('aprobada');
+        } else if (!aprobados) {
+            materia.classList.add('bloqueada');
+            materia.classList.add('tooltip');
+            materia.innerHTML += `<span class="tooltiptext">Requisitos no cumplidos: ${requisitos.filter(req => !progreso[req]).join(', ')}</span>`;
+        }
+    });
+}
+
+//Cargar progreso desde localStorage al cargar la página
+window.addEventListener('load', actualizarEstadoMaterias);
+</script>
+
+</body>
+</html>
